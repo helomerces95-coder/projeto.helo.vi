@@ -40,4 +40,15 @@ def menu ():
                                    7 - tratamento para queda
                                    8 - hidratação capilar 
                                   """)
+                print(f" O procedimento {categoria}, está agendado! ")
+        if opcao == '3':
+            agendamentos = {
+                agendar_procedimento
+            }
+            def cancelar_procedimento (identificador):
+                if identificador in agendamentos:
+                    del agendamentos [identificador] #remove referências de nomes, variavel e afins
+                    
+
+                
                 
