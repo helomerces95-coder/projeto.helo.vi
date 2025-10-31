@@ -1,17 +1,18 @@
+import json
 from cliente import Cliente, carregar_dados, salvar_dados
 from administrativo import Administrador
 from procedimento import LimpezaDePele, Botox, TratamentoAcne, Drenagem, MassagemModeladora, TratamentoEstrias, TratamentoQueda, HidrataçãoCapilar
 
-# Função de menu
+# Função para menu
 def menu():
     print("\n=== CLÍNICA ESTÉTICA JK ===")
     print("1. Cadastro de Cliente")
     print("2. Agendar Procedimento")
-    print("3. Cancelar Agendamento (ADM)")
-    print("4. Histórico de Tratamentos (ADM)")
-    print("5. Faturamento (ADM)")
-    print("6. Editar agendamento")
-    print("7. Sorteio de Cliente Premiado (ADM)")
+    print("3. Cancelar Agendamento")
+    print("4. Histórico de Tratamentos")
+    print("5. Faturamento")
+    print("6. Editar Agendamento")
+    print("7. Sorteio de Cliente Premiado")
     print("8. Sair")
 
 # Função para cadastro de cliente
@@ -123,22 +124,20 @@ def procedimentos_capilares(cliente):
     forma_pagamento = input("Forma de pagamento (cartão/dinheiro/pix): ")
 
     cliente.agendar_procedimento(data, procedimento.nome, forma_pagamento)
-    orientacoes = input("Orientações pós-procedimento: ")
-    cliente.definir_orientacoes(orientacoes)
 
-# Execução principal
-if __name__ == '__main__':
+# Função principal
+def main():
     dados = carregar_dados()
     clientes = {c['cpf']: Cliente(**c) for c in dados.get('clientes', [])}
     admin = Administrador('Admin', '123456789', 30)
-   
+
     while True:
         menu()
         opcao = input("\nEscolha uma opção: ")
 
         if opcao == '1':
             cliente = cadastro_cliente()
-            clientes[cliente.cpf] = cliente  # Armazenando cliente no dicionário pelo CPF
+            clientes[cliente.cpf] = cliente
             salvar_dados({"clientes": [vars(c) for c in clientes.values()]})
 
         elif opcao == '2':
@@ -171,14 +170,13 @@ if __name__ == '__main__':
             cpf_cliente = input("Digite o CPF do cliente:")
             if cpf_cliente in clientes:
                 admin.editar_agendamento(clientes[cpf_cliente])
-                salvar_dados({"clientes": [vars (c) for c in clientes.values()]}) #cria uma lista de dicionario com dados de todos os clientes, e salva no json
+                salvar_dados({"clientes": [vars(c) for c in clientes.values()]})
             else:
-                print("Cliente não encontrado")
+                print("Cliente não encontrado.")
 
         elif opcao == '7':
             admin.sortear_cliente_premiado(clientes)
-            print("sorteio realizado")
-    
+            print("Sorteio realizado!")
 
         elif opcao == '8':
             print("\nEncerrando o sistema. Até logo!")
@@ -186,3 +184,6 @@ if __name__ == '__main__':
 
         else:
             print("Opção inválida!")
+
+if __name__ == "__main__":
+    main()
